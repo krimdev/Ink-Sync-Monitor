@@ -92,10 +92,10 @@ monitor_sync() {
             tput rc
             
             # Print all information
-            echo -e "${BLUE}=================================${NC}"
-            echo -e "${BOLD}${BLUE}Node Sync Monitor by @KrimDevNode${NC}"
+            echo -e "${BLUE}=====================================${NC}"
+            echo -e "${BOLD}${BLUE}Ink Node Sync Monitor by @KrimDevNode${NC}"
             echo -e "${BOLD}${BLUE}Https://krimdevnode.ovh${NC}"
-            echo -e "${BLUE}=================================${NC}"
+            echo -e "${BLUE}=====================================${NC}"
             
             echo -e "\n${BOLD}Sync Status${NC}"
             echo -e "${CYAN}My Node Block:        ${NC}${local_block}"
