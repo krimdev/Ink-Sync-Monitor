@@ -1,26 +1,20 @@
 #!/bin/bash
 
-
+# Configuration
 LOCAL_RPC="http://localhost:8545"
 REMOTE_RPC="https://rpc-gel-sepolia.inkonchain.com"
 
+# Colors
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 PURPLE='\033[0;35m'
 CYAN='\033[0;36m'
-NC='\033[0m'
+NC='\033[0m' # No Color
 BOLD='\033[1m'
 
-move_cursor_home() {
-    tput cup 0 0
-}
-
-clean_to_end() {
-    tput ed
-}
-
+# Function to get block info from RPC endpoint
 get_block_info() {
     local rpc_url=$1
     local block_type=$2
@@ -29,12 +23,14 @@ get_block_info() {
         --data "{\"jsonrpc\":\"2.0\",\"method\":\"eth_getBlockByNumber\",\"params\":[\"$block_type\", true],\"id\":1}"
 }
 
+# Get latest block info
 get_latest_block_info() {
     local rpc_url=$1
     local block_info=$(get_block_info "$rpc_url" "latest")
     echo "$block_info"
 }
 
+# Get block number from full response
 get_block_number() {
     local block_info=$1
     local block_num=$(echo "$block_info" | jq -r '.result.number // empty')
@@ -44,13 +40,21 @@ get_block_number() {
     echo $((block_num))
 }
 
+# Clear screen once at start and save cursor position
 clear
+LINES_NEEDED=20  # Adjust this based on how many lines your output needs
+for ((i=0; i<LINES_NEEDED; i++)); do
+    echo
+done
+tput cup 0 0  # Move cursor back to top
+tput sc      # Save cursor position
 
+# Variables for tracking changes
 last_local_block=0
 start_time=$(date +%s)
 last_update_time=$start_time
-last_processed_blocks=0
 
+# Main monitoring loop
 monitor_sync() {
     while true; do
         current_time=$(date +%s)
@@ -84,10 +88,12 @@ monitor_sync() {
             local_hash=$(echo "$local_block_info" | jq -r '.result.hash // "N/A"')
             local_txs=$(echo "$local_block_info" | jq -r '.result.transactions | length // 0')
             
-            move_cursor_home
-            clean_to_end
+            # Restore cursor to saved position
+            tput rc
             
-            echo -e "${BOLD}${BLUE}Ink Node Sync Monitor by @KrimDevNode${NC}"
+            # Print all information
+            echo -e "${BOLD}${BLUE}Node Sync Monitor by @KrimDevNode${NC}"
+            echo -e "${BOLD}${BLUE}Https://krimdevnode.ovh${NC}"
             echo -e "${BLUE}===================${NC}"
             
             echo -e "\n${BOLD}Sync Status${NC}"
@@ -105,7 +111,6 @@ monitor_sync() {
             echo -e "${PURPLE}Block timestamp:     ${NC}${local_date}"
             echo -e "${PURPLE}Block transactions:  ${NC}${local_txs}"
             
-            # Visual progress bar
             echo -e "\n${BOLD}Progress${NC}"
             progress_int=${progress%.*}
             progress_bar=$((progress_int/2))
@@ -122,8 +127,7 @@ monitor_sync() {
             last_local_block=$local_block
             last_update_time=$current_time
         else
-            move_cursor_home
-            clean_to_end
+            tput rc
             echo -e "${RED}Error: Failed to get block numbers${NC}"
         fi
         
