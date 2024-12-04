@@ -87,7 +87,7 @@ monitor_sync() {
             move_cursor_home
             clean_to_end
             
-            echo -e "${BOLD}${BLUE}Node Sync Monitor${NC}"
+            echo -e "${BOLD}${BLUE}Ink Node Sync Monitor by @KrimDevNode${NC}"
             echo -e "${BLUE}===================${NC}"
             
             echo -e "\n${BOLD}Sync Status${NC}"
