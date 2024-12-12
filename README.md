@@ -1,6 +1,6 @@
 # Ink Node Sync Monitor
 
-![DEMO](https://krimdenode.ovh/inkstatus.png)
+![DEMO](https://krimdevnode.ovh/inkstatus.png)
 
 
 A bash script to monitor the synchronization progress of your Ink Network node with real-time updates and detailed block information.
